@@ -1,0 +1,9 @@
+**/.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfplan
+
+# credentials
+.env
+*.pem
+*-sa-key.json

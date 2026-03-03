@@ -1,0 +1,55 @@
+import {
+  to = module.github.github_organization_settings.org
+  id = "jae-labs"
+}
+
+import {
+  to = module.github.github_membership.members["luiz1361"]
+  id = "jae-labs:luiz1361"
+}
+
+import {
+  to = module.github.github_team.teams["Maintainers"]
+  id = "15819161"
+}
+
+import {
+  to = module.github.github_repository.repos["terraform"]
+  id = "terraform"
+}
+
+import {
+  to = module.github.github_repository.repos["dotfiles"]
+  id = "dotfiles"
+}
+
+import {
+  to = module.github.github_repository.repos["catv"]
+  id = "catv"
+}
+
+import {
+  to = module.github.github_repository.repos["pages"]
+  id = "pages"
+}
+
+import {
+  to = module.github.github_repository.repos["sandbox"]
+  id = "sandbox"
+}
+
+import {
+  to = module.github.github_repository.repos[".github"]
+  id = ".github"
+}
+
+import {
+  to = module.github.github_repository.repos["homebrew-formulae"]
+  id = "homebrew-formulae"
+}
+
+import {
+  to = module.github.github_repository.repos["scripts"]
+  id = "scripts"
+}
+
