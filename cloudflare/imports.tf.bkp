@@ -1,0 +1,89 @@
+# zone
+import {
+  to = module.cloudflare.cloudflare_zone.zones["justanother.engineer"]
+  id = "c147baaeba48af70e14bd1aaf9e32f2f"
+}
+
+# A records
+import {
+  to = module.cloudflare.cloudflare_dns_record.records["justanother.engineer:ha-a"]
+  id = "c147baaeba48af70e14bd1aaf9e32f2f/d314b3b1e3941aee6f914313910f3246"
+}
+
+import {
+  to = module.cloudflare.cloudflare_dns_record.records["justanother.engineer:root-a-1"]
+  id = "c147baaeba48af70e14bd1aaf9e32f2f/363b375528ae13190feed7ff1da22610"
+}
+
+import {
+  to = module.cloudflare.cloudflare_dns_record.records["justanother.engineer:root-a-2"]
+  id = "c147baaeba48af70e14bd1aaf9e32f2f/4aea53c1d3a52ab38ed1c096e58992c7"
+}
+
+import {
+  to = module.cloudflare.cloudflare_dns_record.records["justanother.engineer:root-a-3"]
+  id = "c147baaeba48af70e14bd1aaf9e32f2f/6aaf68d8cc7a20ff4112af7ce7aedc49"
+}
+
+import {
+  to = module.cloudflare.cloudflare_dns_record.records["justanother.engineer:root-a-4"]
+  id = "c147baaeba48af70e14bd1aaf9e32f2f/0c587533a1512ebcfb77d1248ffe1164"
+}
+
+# CNAME records
+import {
+  to = module.cloudflare.cloudflare_dns_record.records["justanother.engineer:www-cname"]
+  id = "c147baaeba48af70e14bd1aaf9e32f2f/18e78782d4be0a434177ae87ca735fbd"
+}
+
+# MX records
+import {
+  to = module.cloudflare.cloudflare_dns_record.records["justanother.engineer:mx-zoho-1"]
+  id = "c147baaeba48af70e14bd1aaf9e32f2f/5119d61e2a4e9c3df0fe48057ac135e3"
+}
+
+import {
+  to = module.cloudflare.cloudflare_dns_record.records["justanother.engineer:mx-zoho-2"]
+  id = "c147baaeba48af70e14bd1aaf9e32f2f/e7f9afc7ccce316ca94f5c20b03a3125"
+}
+
+import {
+  to = module.cloudflare.cloudflare_dns_record.records["justanother.engineer:mx-zoho-3"]
+  id = "c147baaeba48af70e14bd1aaf9e32f2f/05e7e4174afeaa61afd0010ffa1924ee"
+}
+
+# TXT records
+import {
+  to = module.cloudflare.cloudflare_dns_record.records["justanother.engineer:txt-algolia"]
+  id = "c147baaeba48af70e14bd1aaf9e32f2f/0201f91bf95c4880cff6b65221c310f8"
+}
+
+import {
+  to = module.cloudflare.cloudflare_dns_record.records["justanother.engineer:txt-gh-org"]
+  id = "c147baaeba48af70e14bd1aaf9e32f2f/76132f11b9324ee9ba8240665e33f60b"
+}
+
+import {
+  to = module.cloudflare.cloudflare_dns_record.records["justanother.engineer:txt-gh-pages-jae-labs"]
+  id = "c147baaeba48af70e14bd1aaf9e32f2f/799a2d13338a75b9390096e9cfcb7739"
+}
+
+import {
+  to = module.cloudflare.cloudflare_dns_record.records["justanother.engineer:txt-gh-pages-luiz1361"]
+  id = "c147baaeba48af70e14bd1aaf9e32f2f/0ebd3b855ba1430fdcb4aef1819d304b"
+}
+
+import {
+  to = module.cloudflare.cloudflare_dns_record.records["justanother.engineer:txt-gitlab-pages"]
+  id = "c147baaeba48af70e14bd1aaf9e32f2f/c25dc22eff94c957540b2eb73dde34c0"
+}
+
+import {
+  to = module.cloudflare.cloudflare_dns_record.records["justanother.engineer:txt-google-verification"]
+  id = "c147baaeba48af70e14bd1aaf9e32f2f/a5880afde590958d197ee66d7fc3aef7"
+}
+
+import {
+  to = module.cloudflare.cloudflare_dns_record.records["justanother.engineer:txt-spf"]
+  id = "c147baaeba48af70e14bd1aaf9e32f2f/b19e32ffc68dd8ec9d3c89f5c19fefbf"
+}
