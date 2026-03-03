@@ -17,12 +17,12 @@ locals {
 
   repos = {
     "terraform" = {
-      description       = "Terraform IaC for managing GitHub and other tools"
-      visibility        = "public"
-      has_issues        = true
-      has_wiki          = false
-      default_branch    = "main"
-      team_access       = { "Maintainers" = "admin" }
+      description    = "Terraform IaC for managing this GitHub organization and a few other tools"
+      visibility     = "public"
+      has_issues     = true
+      has_wiki       = false
+      default_branch = "main"
+      team_access    = { "Maintainers" = "admin" }
       branch_protection = {
         required_reviews                = 1
         dismiss_stale_reviews           = true
