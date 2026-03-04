@@ -112,7 +112,7 @@ resource "github_repository" "repos" {
   topics                 = each.value.topics
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false #TODO: Review
     # pages config managed via GitHub UI, not Terraform
     ignore_changes = [pages]
   }
