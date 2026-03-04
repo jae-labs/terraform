@@ -1,11 +1,4 @@
 locals {
-  # resolve email for each member; default to username@email_domain
-  members_resolved = {
-    for username, m in var.members : username => merge(m, {
-      email = coalesce(m.email, "${username}@${var.email_domain}")
-    })
-  }
-
   # merge maintainers into members per team (maintainer role takes precedence)
   team_members_by_role = {
     for team_name, team in var.teams : team_name => merge(

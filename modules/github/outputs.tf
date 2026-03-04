@@ -12,8 +12,3 @@ output "repo_node_ids" {
   description = "map of repository names to node IDs"
   value       = { for k, v in github_repository.repos : k => v.node_id }
 }
-
-output "member_emails" {
-  description = "map of usernames to resolved email addresses"
-  value       = { for k, v in local.members_resolved : k => v.email }
-}

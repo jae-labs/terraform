@@ -1,6 +1,5 @@
 locals {
   org          = "jae-labs"
-  email_domain = "jae.sh"
 
   members = {
     "luiz1361" = { role = "admin", full_name = "Luiz" }

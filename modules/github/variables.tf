@@ -3,17 +3,11 @@ variable "org" {
   type        = string
 }
 
-variable "email_domain" {
-  description = "default email domain suffix for members (e.g. jae.sh)"
-  type        = string
-}
-
 variable "members" {
-  description = "map of GitHub usernames to member config; email defaults to username@email_domain"
+  description = "map of GitHub usernames to member config"
   type = map(object({
     role      = string
     full_name = string
-    email     = optional(string)
   }))
   default = {}
 }
