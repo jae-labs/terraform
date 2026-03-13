@@ -6,4 +6,3 @@ module "cloudflare" {
   dns_records = local.dns_records
   members     = local.members
 }
-

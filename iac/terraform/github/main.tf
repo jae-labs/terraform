@@ -7,4 +7,3 @@ module "github" {
   repos        = local.repos
   org_settings = local.org_settings
 }
-
