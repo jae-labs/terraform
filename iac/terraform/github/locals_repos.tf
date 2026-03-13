@@ -107,14 +107,5 @@ locals {
       team_access       = { "Maintainers" = "admin" }
       branch_protection = null
     }
-    "test" = {
-      description      = "test"
-      visibility       = "private"
-      has_issues       = true
-      default_branch   = "main"
-      topics           = ["test"]
-      team_access      = { "Collaborators" = "pull", "Maintainers" = "admin" }
-      branch_protection = null
-    }
   }
 }
