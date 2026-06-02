@@ -1,4 +1,4 @@
-# GitHub Module
+# GitHub Root
 
 Manages the `jae-labs` GitHub organization: members, teams, repositories, environments, and branch protection.
 
@@ -19,7 +19,7 @@ Manages the `jae-labs` GitHub organization: members, teams, repositories, enviro
 
 ## Configuration Locals
 
-These local variables are defined across the configuration files in the root module:
+These local variables are defined in the GitHub Terraform root:
 
 | Name | Type | Description |
 |---|---|---|
@@ -31,7 +31,7 @@ These local variables are defined across the configuration files in the root mod
 
 ## Locals files
 
-Root module `github/` defines configuration in:
+Root `github/` defines configuration in:
 
 | File | Content |
 |---|---|
@@ -41,7 +41,7 @@ For `repos`, the map key is the repository name used by `github_repository.name`
 
 ## Flattening pattern
 
-The module flattens nested maps into composite keys for `for_each`:
+This root flattens nested maps into composite keys for `for_each`:
 
 | Local | Source | Key format |
 |---|---|---|
@@ -51,21 +51,21 @@ The module flattens nested maps into composite keys for `for_each`:
 
 ## Bot integration
 
-**Status**: Fully integrated.
+**Status**: Integrated via `concierge-schema.yaml`.
 
-The [conCierge bot](https://github.com/jae-labs/conCIerge/tree/main) is an external client of this repo. It reads these locals files to populate Slack workflows and validate requests, then writes changes back by editing them and opening pull requests.
+The [conCierge bot](https://github.com/jae-labs/conCIerge/tree/main) is an external client of this repo. It reads these locals to populate Slack workflows and validate requests, then writes changes back by editing them and opening pull requests.
 
-For this module, the contract is the file paths and HCL shapes in those locals files. The bot reads and writes all three via path constants in [`src/internal/slack/handler.go`](https://github.com/jae-labs/conCIerge/blob/main/src/internal/slack/handler.go):
+For GitHub, the contract is `concierge-schema.yaml` plus the file paths and locals shapes it references:
 
-| Constant | Target file |
+| Schema resource | File | Root path |
 |---|---|
-| `pathGitHubRepos` | `locals.tf` |
-| `pathGitHubMembers` | `locals.tf` |
-| `pathGitHubOrg` | `locals.tf` |
+| `repo` | `github/locals.tf` | `repos` |
+| `org_settings` | `github/locals.tf` | `org_settings` |
+| `user_management` | `github/locals.tf` | `teams`, `members` |
 
-Bot operations: add/delete/update repos, extract team names, read/update org settings, add/remove/change team members.
+Bot operations exposed by the schema: add/delete/update repos, extract team names, read/update org settings, add/remove/change team members.
 
-Do not rename those files or change their key names or nesting without updating the bot path constants and HCL editors in the [conCierge repo](https://github.com/jae-labs/conCIerge/tree/main). If the contract drifts, Slack request handling and PR generation break before Terraform does.
+If you rename files or change local key names, nesting, or field paths, update `concierge-schema.yaml` in the same change. If the contract drifts, Slack request handling and PR generation break before Terraform does.
 
 ## Auth
 
@@ -144,7 +144,7 @@ environments = {
 
 ### Managing GitHub Pages
 
-Use the repo `pages` object to manage GitHub Pages. The module applies that input with the dedicated `github_repository_pages` resource.
+Use the repo `pages` object to manage GitHub Pages. This root applies that input with the dedicated `github_repository_pages` resource.
 
 ```hcl
 pages = {
@@ -166,7 +166,7 @@ security_and_analysis = {
 
 ### Managing repository vulnerability alerts
 
-Use the per-repo `vulnerability_alerts` boolean to manage Dependabot vulnerability and malware alerts. The module keeps that input shape stable and applies it with the dedicated `github_repository_vulnerability_alerts` resource.
+Use the per-repo `vulnerability_alerts` boolean to manage Dependabot vulnerability and malware alerts. This root keeps that input shape stable and applies it with the dedicated `github_repository_vulnerability_alerts` resource.
 
 ```hcl
 vulnerability_alerts = true
@@ -174,7 +174,7 @@ vulnerability_alerts = true
 
 ### Managing Dependabot security updates
 
-Use the per-repo `dependabot_security_updates` boolean to manage automated Dependabot security update pull requests. The module applies that input with the dedicated `github_repository_dependabot_security_updates` resource.
+Use the per-repo `dependabot_security_updates` boolean to manage automated Dependabot security update pull requests. This root applies that input with the dedicated `github_repository_dependabot_security_updates` resource.
 
 ```hcl
 dependabot_security_updates = true

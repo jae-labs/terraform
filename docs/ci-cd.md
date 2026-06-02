@@ -17,7 +17,7 @@ GitHub Actions workflows at `.github/workflows/` in the repo root.
 
 GitHub, Cloudflare, and Doppler call `terraform-reusable.yml` with inputs:
 
-- `module-path` (string) -- path to root module
+- `module-path` (string) -- path to Terraform root
 - `provider-token-name` (string) -- env var name for provider token
 
 The reusable workflow:
@@ -27,7 +27,7 @@ The reusable workflow:
 3. Runs `terraform init` with `PG_CONN_STR`
 4. Runs `terraform plan` into a temporary local tfplan with stdout/stderr suppressed in GitHub Actions
 5. Runs `terraform apply` from that temporary tfplan with stdout/stderr suppressed in GitHub Actions
-6. Serializes applies per root module with a GitHub Actions concurrency group keyed by repository and `module-path`
+6. Serializes applies per Terraform root with a GitHub Actions concurrency group keyed by repository and `module-path`
 
 ## Dedicated OCI workflow
 
@@ -53,13 +53,13 @@ The main CI workflow (`ci.yml`) runs on all pull requests and pushes to `main` a
 #### Terraform Checks
 1. **Format Check**: Runs `terraform fmt -check -recursive .` to verify styling.
 2. **Lint Check**: Installs TFLint with `terraform-linters/setup-tflint`, then runs `tflint` recursively using the configuration `.tflint.hcl` in the repository root.
-3. **Offline Validation**: Runs a matrix job across all root modules (`github/`, `cloudflare/`, `doppler/`, `oci/`) which:
+3. **Offline Validation**: Runs a matrix job across all Terraform roots (`github/`, `cloudflare/`, `doppler/`, `oci/`) which:
    - Runs `terraform init -backend=false`.
    - Runs `terraform validate`.
 
 ## Trigger
 
-Bot CI runs on path-scoped pushes to `main` and pull requests. Bot releases run on path-scoped pushes to `main`. Terraform applies run on pushes to `main` affecting module-specific paths (see table).
+Bot CI runs on path-scoped pushes to `main` and pull requests. Bot releases run on path-scoped pushes to `main`. Terraform applies run on pushes to `main` affecting root-specific paths (see table).
 
 ## Secrets
 

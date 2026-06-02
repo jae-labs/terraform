@@ -1,4 +1,4 @@
-# Cloudflare Module
+# Cloudflare Root
 
 Manages DNS records and account members for `jae-labs`.
 
@@ -15,7 +15,7 @@ Manages DNS records and account members for `jae-labs`.
 
 ## Configuration Locals
 
-These local variables are defined across the configuration files in the root module:
+These local variables are defined in the Cloudflare Terraform root:
 
 | Local | Type | Description |
 |---|---|---|
@@ -63,15 +63,15 @@ All metadata lives in a single locals file under `cloudflare/`:
 
 ## Bot integration
 
-**Status: Partially integrated (DNS records only)**
+**Status: Partially integrated via `concierge-schema.yaml` (DNS records only)**
 
 The [conCierge bot](https://github.com/jae-labs/conCIerge/tree/main) is an external client of this repo. It reads `locals.tf` to populate Slack workflows and validate DNS requests, then writes changes back by editing that file and opening pull requests.
 
-For Cloudflare DNS, the contract is the `locals.tf` path and its HCL shape. Path constant in [`src/internal/slack/handler.go`](https://github.com/jae-labs/conCIerge/blob/main/src/internal/slack/handler.go):
+For Cloudflare DNS, the contract is `concierge-schema.yaml` plus the `locals.tf` path and locals shape it references:
 
-```go
-pathCloudflareDNS = "cloudflare/locals.tf"
-```
+| Schema resource | File | Root path |
+|---|---|---|
+| `dns` | `cloudflare/locals.tf` | `dns_records.justanother.engineer` |
 
 | Operation | Supported |
 |---|---|
@@ -81,7 +81,7 @@ pathCloudflareDNS = "cloudflare/locals.tf"
 | Zone management | no |
 | Account members | no |
 
-Do not rename `locals.tf` or change its key names or nesting without updating the bot path constants and HCL editors in the [conCierge repo](https://github.com/jae-labs/conCIerge/tree/main). If the contract drifts, Slack DNS flows and PR generation break before Terraform does.
+Do not rename `locals.tf` or change its key names, nesting, or field paths without updating `concierge-schema.yaml` in the same change. If the contract drifts, Slack DNS flows and PR generation break before Terraform does.
 
 ## Auth
 

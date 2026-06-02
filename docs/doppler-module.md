@@ -1,4 +1,4 @@
-# Doppler Module
+# Doppler Root
 
 Manages secrets infrastructure: projects, environments, groups, and access grants.
 
@@ -13,7 +13,7 @@ Manages secrets infrastructure: projects, environments, groups, and access grant
 
 ## Configuration Locals
 
-These local variables are defined across the configuration files in the root module:
+These local variables are defined in the Doppler Terraform root:
 
 | Local | Type | Description |
 |---|---|---|
@@ -85,14 +85,21 @@ project_access = [
 
 ## Bot integration
 
-**Status: Not yet implemented.**
+**Status: Partially integrated via `concierge-schema.yaml` (projects only).**
 
-When implemented, the bot will need:
-- Path constants for `locals.tf`
-- HCL editors for project/environment/group/access CRUD
-- Block Kit modals and validation
+Current schema coverage:
 
-See `src/docs/adding-a-resource-type.md` for the implementation guide.
+| Schema resource | File | Root path | Actions |
+|---|---|---|---|
+| `project` | `doppler/locals.tf` | `projects` | `add`, `settings`, `delete` |
+
+Current gaps:
+
+- environments are still edited through `projects[*].environments`, but not exposed directly in the schema
+- `groups` are not exposed in the schema
+- `project_access` is not exposed in the schema
+
+If you change `projects` structure, file paths, or field paths, update `concierge-schema.yaml` in the same change.
 
 ## Auth
 

@@ -1,4 +1,4 @@
-# OCI Module
+# OCI Root
 
 Manages a minimal OCI stack for `jae-labs`: one VCN, one public subnet, explicit security controls, one Intel E2.1.Micro compute instance by default, no attached data volumes by default, and fixed private/public IPs for the instance.
 
@@ -44,13 +44,13 @@ Manages a minimal OCI stack for `jae-labs`: one VCN, one public subnet, explicit
 
 ## Flattening
 
-None. The OCI root module is intentionally flat and manages a single stack directly from `oci/`.
+None. The OCI root is intentionally flat and manages a single stack directly from `oci/`.
 
 ## Bot integration
 
 **Status: Not integrated.**
 
-The [conCierge Slack bot](https://github.com/jae-labs/conCIerge/tree/main) does not read or write any OCI Terraform files.
+The [conCierge Slack bot](https://github.com/jae-labs/conCIerge/tree/main) does not read or write any OCI Terraform files, and `oci/` is not exposed in `concierge-schema.yaml`.
 
 ## Host configuration
 
@@ -106,10 +106,10 @@ Use the `name` field exactly as returned by OCI.
 
 The committed defaults in `locals.tf` keep the stack simple for the current tenancy limits: `1` `VM.Standard.E2.1.Micro` instance, a `200` GB boot volume, no attached data volumes, one fixed private IP in the public subnet, and one reserved public IP.
 
-### Apply the OCI stack
+### Apply the OCI root
 
 ```bash
-cd terraform/oci
+cd oci
 terraform init
 terraform plan
 terraform apply
