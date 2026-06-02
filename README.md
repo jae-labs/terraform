@@ -27,7 +27,7 @@ This repository is the source of truth for all `jae-labs` infrastructure as code
 - GitHub Actions runs format, lint, and validation checks on pull requests.
 - Merges to `main` trigger path-filtered applies for only the affected provider root.
 
-Architecture, state layout, and repo structure live in [docs/architecture.md](docs/architecture.md).
+Architecture, state layout, and repo structure live in [docs/architecture.md](docs/architecture.md). Provider-root conventions live in [docs/providers.md](docs/providers.md).
 
 ## Quick start
 
@@ -89,8 +89,5 @@ If you rename files, move blocks, or change key names, nesting, or field paths i
 | Document | Description |
 |---|---|
 | [docs/architecture.md](docs/architecture.md) | Repository layout, state model, apply flow, bot coupling |
-| [docs/github-module.md](docs/github-module.md) | GitHub root configuration |
-| [docs/cloudflare-module.md](docs/cloudflare-module.md) | Cloudflare root configuration |
-| [docs/doppler-module.md](docs/doppler-module.md) | Doppler root configuration |
-| [docs/oci-module.md](docs/oci-module.md) | OCI root configuration |
+| [docs/providers.md](docs/providers.md) | Generic provider-root model, `locals.tf`, and concierge contract |
 | [docs/ci-cd.md](docs/ci-cd.md) | GitHub Actions workflows and secrets |
