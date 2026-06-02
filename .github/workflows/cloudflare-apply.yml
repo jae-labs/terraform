@@ -1,0 +1,20 @@
+name: "Terraform Cloudflare Apply"
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "cloudflare/**"
+
+jobs:
+  apply:
+    uses: ./.github/workflows/terraform-reusable.yml
+    with:
+      module-path: cloudflare
+      provider-token-name: CLOUDFLARE_API_TOKEN
+    secrets:
+      PG_CONN_STR: ${{ secrets.PG_CONN_STR }}
+      PROVIDER_TOKEN: ${{ secrets.CONCIERGE_CLOUDFLARE_API_TOKEN }}
