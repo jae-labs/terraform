@@ -307,5 +307,23 @@ locals {
         secret_scanning_push_protection = { status = "enabled" }
       }
     }
+    "test" = {
+      allow_auto_merge       = false
+      allow_update_branch    = false
+      branch_protection = {
+        dismiss_stale_reviews           = false
+        require_conversation_resolution = false
+        require_linear_history          = false
+      }
+      delete_branch_on_merge = false
+      description            = "test"
+      has_discussions        = false
+      has_issues             = false
+      has_projects           = false
+      has_wiki               = false
+      team_access            = {  }
+      topics                 = ["test"]
+      visibility             = "public"
+    }
   }
 }
