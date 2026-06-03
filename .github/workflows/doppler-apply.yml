@@ -1,0 +1,20 @@
+name: "Terraform Doppler Apply"
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "doppler/**"
+
+jobs:
+  apply:
+    uses: ./.github/workflows/terraform-reusable.yml
+    with:
+      module-path: doppler
+      provider-token-name: DOPPLER_TOKEN
+    secrets:
+      PG_CONN_STR: ${{ secrets.PG_CONN_STR }}
+      PROVIDER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}

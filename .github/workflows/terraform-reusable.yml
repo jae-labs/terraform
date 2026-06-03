@@ -1,0 +1,54 @@
+name: "Terraform Apply"
+
+permissions:
+  contents: read
+
+on:
+  workflow_call:
+    inputs:
+      module-path:
+        required: true
+        type: string
+      provider-token-name:
+        required: true
+        type: string
+        description: "env var name for the provider token (e.g. GITHUB_TOKEN, DOPPLER_TOKEN)"
+    secrets:
+      PG_CONN_STR:
+        required: true
+      PROVIDER_TOKEN:
+        required: true
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    environment: production
+    concurrency:
+      group: terraform-apply-${{ github.repository }}-${{ inputs.module-path }}
+      cancel-in-progress: false
+    defaults:
+      run:
+        working-directory: ${{ inputs.module-path }}
+
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # ratchet:actions/checkout@v6.0.3
+
+      - uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e # ratchet:hashicorp/setup-terraform@v4
+        with:
+          terraform_version: "~> 1.5"
+
+      - name: Terraform init
+        run: terraform init
+        env:
+          PG_CONN_STR: ${{ secrets.PG_CONN_STR }}
+
+      - name: Terraform plan/apply
+        run: |
+          set -euo pipefail
+          export "${{ inputs.provider-token-name }}=${{ secrets.PROVIDER_TOKEN }}"
+          plan_file="$(mktemp "${TMPDIR:-/tmp}/terraform-plan.XXXXXX")"
+          trap 'rm -f "${plan_file}"' EXIT
+          terraform plan -input=false -no-color -out="${plan_file}"
+          terraform apply -input=false -auto-approve "${plan_file}"
+        env:
+          PG_CONN_STR: ${{ secrets.PG_CONN_STR }}

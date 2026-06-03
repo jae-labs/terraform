@@ -1,0 +1,20 @@
+name: "Terraform Tailscale Apply"
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "tailscale/**"
+
+jobs:
+  apply:
+    uses: ./.github/workflows/terraform-reusable.yml
+    with:
+      module-path: tailscale
+      provider-token-name: TAILSCALE_API_KEY
+    secrets:
+      PG_CONN_STR: ${{ secrets.PG_CONN_STR }}
+      PROVIDER_TOKEN: ${{ secrets.TAILSCALE_API_KEY }}
