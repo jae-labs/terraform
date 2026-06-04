@@ -20,16 +20,6 @@ locals {
       objective = 0.995
       window    = "28d"
     }
-    "n8n-webhook-availability" = {
-      name        = "n8n Webhook Availability"
-      description = "n8n webhook check success rate metric"
-      query = {
-        success_metric = "probe_success{job=\"n8n-prod-webhook-availability\"}"
-        total_metric   = "probe_success{job=\"n8n-prod-webhook-availability\"}"
-      }
-      objective = 0.995
-      window    = "28d"
-    }
     "telemetry-availability" = {
       name        = "Telemetry Availability"
       description = "Telemetry availability metric"
@@ -51,21 +41,6 @@ locals {
       timeout            = 3000
       probes             = [7, 8, 18, 20, 21, 27, 901, 903]
       basic_metrics_only = false
-      settings = {
-        http = {
-          fail_if_not_ssl = true
-          method          = "GET"
-        }
-      }
-    }
-    "oci-n8n-webhook" = {
-      target             = "https://oci.justanother.engineer/n8n/webhook/health"
-      job                = "oci.justanother.engineer/n8n/webhook/health"
-      type               = "http"
-      frequency          = 1800000 # in milliseconds (30m)
-      timeout            = 3000
-      probes             = [7]
-      basic_metrics_only = true
       settings = {
         http = {
           fail_if_not_ssl = true
