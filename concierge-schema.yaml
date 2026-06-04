@@ -1,0 +1,230 @@
+version: 1
+
+categories:
+  - id: github
+    label: GitHub
+    order: 10
+  - id: cloudflare
+    label: Cloudflare
+    order: 20
+  - id: doppler
+    label: Doppler
+    order: 30
+
+resources:
+  - id: repo
+    category: github
+    kind: map_entry
+    label: GitHub Repositories
+    file: github/locals.tf
+    root_path: repos
+    key_label: Repository Name
+    key_pattern: "^[A-Za-z0-9._-]+$"
+    actions: [add, settings, delete]
+    steps:
+      - id: basics
+        title: Basic Information
+        fields:
+          - path: description
+            type: string
+            label: Description
+            required: true
+          - path: visibility
+            type: select
+            label: Visibility
+            required: true
+            options: [public, private]
+          - path: topics
+            type: list_string
+            label: Topics
+          - path: default_branch
+            type: string
+            label: Default Branch
+          - path: homepage_url
+            type: string
+            label: Homepage URL
+      - id: access
+        title: Team Access
+        fields:
+          - path: team_access
+            type: map_string
+            label: Team Access
+            key_source:
+              file: github/locals.tf
+              root_path: teams
+            value_options: [admin, maintain, push, triage, pull]
+      - id: features
+        title: Features and Protection
+        fields:
+          - path: has_issues
+            type: boolean
+            label: Enable Issues
+          - path: has_wiki
+            type: boolean
+            label: Enable Wiki
+          - path: has_projects
+            type: boolean
+            label: Enable Projects
+          - path: has_discussions
+            type: boolean
+            label: Enable Discussions
+          - path: allow_auto_merge
+            type: boolean
+            label: Allow Auto Merge
+          - path: allow_update_branch
+            type: boolean
+            label: Allow Update Branch
+          - path: delete_branch_on_merge
+            type: boolean
+            label: Delete Branch On Merge
+          - path: branch_protection.required_reviews
+            type: integer
+            label: Required Reviews
+          - path: branch_protection.dismiss_stale_reviews
+            type: boolean
+            label: Dismiss Stale Reviews
+          - path: branch_protection.require_linear_history
+            type: boolean
+            label: Require Linear History
+          - path: branch_protection.require_conversation_resolution
+            type: boolean
+            label: Require Conversation Resolution
+
+  - id: dns
+    category: cloudflare
+    kind: map_entry
+    label: DNS Records
+    file: cloudflare/locals.tf
+    root_path: dns_records.justanother.engineer
+    key_label: Record Key
+    key_pattern: "^[A-Za-z0-9._-]+$"
+    actions: [add, settings, delete]
+    steps:
+      - id: basics
+        title: Record Details
+        fields:
+          - path: type
+            type: select
+            label: Type
+            required: true
+            options: [A, AAAA, CNAME, MX, TXT]
+          - path: name
+            type: string
+            label: Name
+            required: true
+          - path: content
+            type: string
+            label: Content
+            required: true
+          - path: comment
+            type: string
+            label: Comment
+      - id: routing
+        title: Routing
+        fields:
+          - path: proxied
+            type: boolean
+            label: Proxied
+          - path: priority
+            type: integer
+            label: Priority
+
+  - id: project
+    category: doppler
+    kind: map_entry
+    label: Doppler Projects
+    file: doppler/locals.tf
+    root_path: projects
+    key_label: Project Name
+    key_pattern: "^[A-Za-z0-9._-]+$"
+    actions: [add, settings, delete]
+    steps:
+      - id: basics
+        title: Project Details
+        fields:
+          - path: description
+            type: string
+            label: Description
+            required: true
+
+  - id: org_settings
+    category: github
+    kind: singleton
+    label: Organization Settings
+    file: github/locals.tf
+    root_path: org_settings
+    actions: [settings]
+    steps:
+      - id: basics
+        title: Organization Details
+        fields:
+          - path: name
+            type: string
+            label: Name
+            required: true
+          - path: billing_email
+            type: string
+            label: Billing Email
+            required: true
+          - path: blog
+            type: string
+            label: Blog
+          - path: description
+            type: string
+            label: Description
+          - path: location
+            type: string
+            label: Location
+      - id: permissions
+        title: Repository Permissions
+        fields:
+          - path: default_repository_permission
+            type: select
+            label: Default Repository Permission
+            required: true
+            options: [read, write, admin, none]
+          - path: members_can_create_repositories
+            type: boolean
+            label: Members Can Create Repositories
+          - path: web_commit_signoff_required
+            type: boolean
+            label: Web Commit Signoff Required
+          - path: dependabot_alerts_enabled_for_new_repositories
+            type: boolean
+            label: Dependabot Alerts Enabled
+          - path: dependabot_security_updates_enabled_for_new_repositories
+            type: boolean
+            label: Dependabot Security Updates Enabled
+          - path: dependency_graph_enabled_for_new_repositories
+            type: boolean
+            label: Dependency Graph Enabled
+
+  - id: user_management
+    category: github
+    kind: membership
+    label: User Management
+    file: github/locals.tf
+    actions: [add, delete, change_role]
+    steps:
+      - id: membership
+        title: Team Membership
+        fields:
+          - path: team
+            type: select
+            label: Team
+            required: true
+            key_source:
+              file: github/locals.tf
+              root_path: teams
+          - path: username
+            type: select
+            label: Username
+            required: true
+            key_source:
+              file: github/locals.tf
+              root_path: members
+          - path: role
+            type: select
+            label: Role
+            required: true
+            options: [member, maintainer]

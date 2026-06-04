@@ -1,0 +1,96 @@
+name: "Terraform Apply"
+
+permissions:
+  contents: read
+
+on:
+  workflow_call:
+    inputs:
+      module-path:
+        required: true
+        type: string
+      provider-token-name:
+        required: false
+        type: string
+        description: "env var name for the provider token (e.g. GITHUB_TOKEN, DOPPLER_TOKEN)"
+    secrets:
+      PG_CONN_STR:
+        required: false
+      PROVIDER_TOKEN:
+        required: false
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    environment: production
+    concurrency:
+      group: terraform-apply-${{ github.repository }}-${{ inputs.module-path }}
+      cancel-in-progress: false
+    defaults:
+      run:
+        working-directory: ${{ inputs.module-path }}
+
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # ratchet:actions/checkout@v6.0.3
+
+      - uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e # ratchet:hashicorp/setup-terraform@v4
+        with:
+          terraform_version: "~> 1.5"
+
+      - name: OCI private key
+        if: inputs.module-path == 'oci'
+        run: |
+          printf '%s' "$OCI_PRIVATE_KEY" > /tmp/oci-api-key.pem
+          chmod 600 /tmp/oci-api-key.pem
+        env:
+          OCI_PRIVATE_KEY: ${{ secrets.OCI_PRIVATE_KEY }}
+
+      - name: Terraform init
+        run: terraform init -lock-timeout=5m
+        env:
+          PG_CONN_STR: ${{ secrets.PG_CONN_STR }}
+
+      - name: Terraform plan/apply
+        run: |
+          set -euo pipefail
+          if [ -n "${{ inputs.provider-token-name }}" ]; then
+            VAL=""
+            if [ -n "${{ secrets.PROVIDER_TOKEN }}" ]; then
+              VAL="${{ secrets.PROVIDER_TOKEN }}"
+            elif [ "${{ inputs.provider-token-name }}" = "GITHUB_TOKEN" ]; then
+              VAL="${{ secrets.GH_TOKEN }}"
+            elif [ "${{ inputs.provider-token-name }}" = "CLOUDFLARE_API_TOKEN" ]; then
+              VAL="${{ secrets.CLOUDFLARE_API_TOKEN }}"
+            elif [ "${{ inputs.provider-token-name }}" = "DOPPLER_TOKEN" ]; then
+              VAL="${{ secrets.DOPPLER_TOKEN }}"
+            elif [ "${{ inputs.provider-token-name }}" = "SENTRY_AUTH_TOKEN" ]; then
+              VAL="${{ secrets.SENTRY_AUTH_TOKEN }}"
+            elif [ "${{ inputs.provider-token-name }}" = "TAILSCALE_API_KEY" ]; then
+              VAL="${{ secrets.TAILSCALE_API_KEY }}"
+            fi
+            export "${{ inputs.provider-token-name }}=$VAL"
+          fi
+          plan_file="$(mktemp "${TMPDIR:-/tmp}/terraform-plan.XXXXXX")"
+          trap 'rm -f "${plan_file}"' EXIT
+          terraform plan -lock-timeout=5m -input=false -no-color -out="${plan_file}"
+          terraform apply -lock-timeout=5m -input=false -auto-approve "${plan_file}"
+        env:
+          PG_CONN_STR: ${{ secrets.PG_CONN_STR }}
+          # OCI environment variables
+          OCI_FINGERPRINT: ${{ secrets.OCI_FINGERPRINT }}
+          OCI_PRIVATE_KEY_PATH: /tmp/oci-api-key.pem
+          OCI_REGION: ${{ secrets.OCI_REGION }}
+          OCI_TENANCY_OCID: ${{ secrets.OCI_TENANCY_OCID }}
+          OCI_USER_OCID: ${{ secrets.OCI_USER_OCID }}
+          TF_VAR_OCI_AVAILABILITY_DOMAIN: ${{ secrets.TF_VAR_OCI_AVAILABILITY_DOMAIN }}
+          TF_VAR_OCI_COMPARTMENT_OCID: ${{ secrets.TF_VAR_OCI_COMPARTMENT_OCID }}
+          TF_VAR_OCI_SSH_AUTHORIZED_KEYS: ${{ secrets.TF_VAR_OCI_SSH_AUTHORIZED_KEYS }}
+          TF_VAR_SSH_INGRESS_CIDR: ${{ secrets.TF_VAR_SSH_INGRESS_CIDR }}
+          # Grafana environment variables
+          GRAFANA_AUTH: ${{ secrets.GRAFANA_AUTH }}
+          GRAFANA_SM_ACCESS_TOKEN: ${{ secrets.GRAFANA_SM_ACCESS_TOKEN }}
+          GRAFANA_SM_URL: ${{ secrets.GRAFANA_SM_URL }}
+
+      - name: Cleanup OCI credentials
+        if: always() && inputs.module-path == 'oci'
+        run: rm -f /tmp/oci-api-key.pem
