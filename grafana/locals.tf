@@ -48,15 +48,15 @@ locals {
         }
       }
     }
-    "oci-health" = {
-      target              = "https://oci.justanother.engineer/health"
-      job                 = "oci.justanother.engineer/health"
+    "cf-oci-health" = {
+      target              = "https://cf-oci.justanother.engineer/health"
+      job                 = "cf-oci.justanother.engineer/health"
       type                = "browser"
       frequency           = 1800000 # in milliseconds (30m)
       timeout             = 3000
       probes              = [7]
       basic_metrics_only  = true
-      browser_script_file = "scripts/oci_health_check.js"
+      browser_script_file = "scripts/cf_oci_health_check.js"
     }
   }
 }
