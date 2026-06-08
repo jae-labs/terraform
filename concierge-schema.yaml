@@ -1,0 +1,936 @@
+version: 1
+
+categories:
+  - id: github
+    label: GitHub
+    order: 10
+  - id: cloudflare
+    label: Cloudflare
+    order: 20
+  - id: doppler
+    label: Doppler
+    order: 30
+  - id: sentry
+    label: Sentry
+    order: 40
+  - id: tailscale
+    label: Tailscale
+    order: 50
+  - id: grafana
+    label: Grafana
+    order: 60
+  - id: oci
+    label: OCI
+    order: 70
+
+resources:
+  - id: repo
+    category: github
+    kind: map_entry
+    label: GitHub Repositories
+    file: github/locals.tf
+    root_path: repos
+    key_label: Repository Name
+    key_pattern: "^[A-Za-z0-9._-]+$"
+    actions: [add, settings, delete]
+    steps:
+      - id: basics
+        title: Basic Information
+        fields:
+          - path: description
+            type: string
+            label: Description
+            required: true
+          - path: visibility
+            type: select
+            label: Visibility
+            required: true
+            options: [public, private]
+          - path: topics
+            type: list_string
+            label: Topics
+          - path: default_branch
+            type: string
+            label: Default Branch
+          - path: homepage_url
+            type: string
+            label: Homepage URL
+      - id: access
+        title: Team Access
+        fields:
+          - path: team_access
+            type: map_string
+            label: Team Access
+            key_source:
+              file: github/locals.tf
+              root_path: teams
+            value_options: [admin, maintain, push, triage, pull]
+      - id: features
+        title: Features and Protection
+        fields:
+          - path: has_issues
+            type: boolean
+            label: Enable Issues
+          - path: has_wiki
+            type: boolean
+            label: Enable Wiki
+          - path: has_projects
+            type: boolean
+            label: Enable Projects
+          - path: has_discussions
+            type: boolean
+            label: Enable Discussions
+          - path: allow_auto_merge
+            type: boolean
+            label: Allow Auto Merge
+          - path: allow_update_branch
+            type: boolean
+            label: Allow Update Branch
+          - path: delete_branch_on_merge
+            type: boolean
+            label: Delete Branch On Merge
+          - path: branch_protection.required_reviews
+            type: integer
+            label: Required Reviews
+          - path: branch_protection.dismiss_stale_reviews
+            type: boolean
+            label: Dismiss Stale Reviews
+          - path: branch_protection.require_linear_history
+            type: boolean
+            label: Require Linear History
+          - path: branch_protection.require_conversation_resolution
+            type: boolean
+            label: Require Conversation Resolution
+
+  - id: dns
+    category: cloudflare
+    kind: map_entry
+    label: DNS Records
+    file: cloudflare/locals.tf
+    root_path: dns_records.justanother.engineer
+    key_label: Record Key
+    key_pattern: "^[A-Za-z0-9._-]+$"
+    actions: [add, settings, delete]
+    steps:
+      - id: basics
+        title: Record Details
+        fields:
+          - path: type
+            type: select
+            label: Type
+            required: true
+            options: [A, AAAA, CNAME, MX, TXT]
+          - path: name
+            type: string
+            label: Name
+            required: true
+          - path: content
+            type: string
+            label: Content
+            required: true
+          - path: comment
+            type: string
+            label: Comment
+      - id: routing
+        title: Routing
+        fields:
+          - path: proxied
+            type: boolean
+            label: Proxied
+          - path: priority
+            type: integer
+            label: Priority
+
+  - id: project
+    category: doppler
+    kind: map_entry
+    label: Doppler Projects
+    file: doppler/locals.tf
+    root_path: projects
+    key_label: Project Name
+    key_pattern: "^[A-Za-z0-9._-]+$"
+    actions: [add, settings, delete]
+    steps:
+      - id: basics
+        title: Project Details
+        fields:
+          - path: description
+            type: string
+            label: Description
+            required: true
+
+  - id: org_settings
+    category: github
+    kind: singleton
+    label: Organization Settings
+    file: github/locals.tf
+    root_path: org_settings
+    actions: [settings]
+    steps:
+      - id: basics
+        title: Organization Details
+        fields:
+          - path: name
+            type: string
+            label: Name
+            required: true
+          - path: billing_email
+            type: string
+            label: Billing Email
+            required: true
+          - path: blog
+            type: string
+            label: Blog
+          - path: description
+            type: string
+            label: Description
+          - path: location
+            type: string
+            label: Location
+      - id: permissions
+        title: Repository Permissions
+        fields:
+          - path: default_repository_permission
+            type: select
+            label: Default Repository Permission
+            required: true
+            options: [read, write, admin, none]
+          - path: members_can_create_repositories
+            type: boolean
+            label: Members Can Create Repositories
+          - path: web_commit_signoff_required
+            type: boolean
+            label: Web Commit Signoff Required
+          - path: dependabot_alerts_enabled_for_new_repositories
+            type: boolean
+            label: Dependabot Alerts Enabled
+          - path: dependabot_security_updates_enabled_for_new_repositories
+            type: boolean
+            label: Dependabot Security Updates Enabled
+          - path: dependency_graph_enabled_for_new_repositories
+            type: boolean
+            label: Dependency Graph Enabled
+
+  - id: user_management
+    category: github
+    kind: membership
+    label: User Management
+    file: github/locals.tf
+    actions: [add, delete, change_role]
+    steps:
+      - id: membership
+        title: Team Membership
+        fields:
+          - path: team
+            type: select
+            label: Team
+            required: true
+            key_source:
+              file: github/locals.tf
+              root_path: teams
+          - path: username
+            type: select
+            label: Username
+            required: true
+            key_source:
+              file: github/locals.tf
+              root_path: members
+          - path: role
+            type: select
+            label: Role
+            required: true
+            options: [member, maintainer]
+
+  - id: github_member
+    category: github
+    kind: map_entry
+    label: GitHub Members
+    file: github/locals.tf
+    root_path: members
+    key_label: Username
+    key_pattern: "^[A-Za-z0-9._-]+$"
+    actions: [add, settings, delete]
+    steps:
+      - id: basics
+        title: Member Configuration
+        fields:
+          - path: role
+            type: select
+            label: Role
+            required: true
+            options: [admin, member]
+          - path: full_name
+            type: string
+            label: Full Name
+
+  - id: github_team
+    category: github
+    kind: map_entry
+    label: GitHub Teams
+    file: github/locals.tf
+    root_path: teams
+    key_label: Team Name
+    key_pattern: "^[A-Za-z0-9._-]+$"
+    actions: [add, settings, delete]
+    steps:
+      - id: basics
+        title: Team Configuration
+        fields:
+          - path: description
+            type: string
+            label: Description
+          - path: privacy
+            type: select
+            label: Privacy
+            required: true
+            options: [closed, secret]
+          - path: members
+            type: list_string
+            label: Members
+            key_source:
+              file: github/locals.tf
+              root_path: members
+          - path: maintainers
+            type: list_string
+            label: Maintainers
+            key_source:
+              file: github/locals.tf
+              root_path: members
+
+  - id: cloudflare_kv_namespace
+    category: cloudflare
+    kind: map_entry
+    label: Cloudflare KV Namespaces
+    file: cloudflare/locals.tf
+    root_path: kv_namespaces
+    key_label: KV Namespace ID
+    actions: [add, settings, delete]
+    steps:
+      - id: basics
+        title: KV Details
+        fields:
+          - path: title
+            type: string
+            label: Namespace Title
+            required: true
+
+  - id: cloudflare_pages_project
+    category: cloudflare
+    kind: map_entry
+    label: Cloudflare Pages Projects
+    file: cloudflare/locals.tf
+    root_path: pages_projects
+    key_label: Project Name
+    actions: [add, settings, delete]
+    steps:
+      - id: basics
+        title: Project Details
+        fields:
+          - path: production_branch
+            type: string
+            label: Production Branch
+            required: true
+          - path: compatibility_date
+            type: string
+            label: Compatibility Date
+          - path: compatibility_flags
+            type: list_string
+            label: Compatibility Flags
+          - path: build_config.build_command
+            type: string
+            label: Build Command
+          - path: build_config.destination_dir
+            type: string
+            label: Destination Dir
+          - path: build_config.root_dir
+            type: string
+            label: Root Dir
+          - path: custom_domains
+            type: list_string
+            label: Custom Domains
+
+  - id: cloudflare_worker_script
+    category: cloudflare
+    kind: map_entry
+    label: Cloudflare Worker Scripts
+    file: cloudflare/locals.tf
+    root_path: worker_scripts
+    key_label: Worker Script Name
+    actions: [add, settings, delete]
+    steps:
+      - id: basics
+        title: Worker Configuration
+        fields:
+          - path: content_file
+            type: string
+            label: Script File Path
+            required: true
+          - path: compatibility_date
+            type: string
+            label: Compatibility Date
+
+  - id: cloudflare_worker_custom_domain
+    category: cloudflare
+    kind: map_entry
+    label: Cloudflare Worker Custom Domains
+    file: cloudflare/locals.tf
+    root_path: worker_custom_domains
+    key_label: Custom Domain ID
+    actions: [add, settings, delete]
+    steps:
+      - id: basics
+        title: Worker Domain Details
+        fields:
+          - path: hostname
+            type: string
+            label: Hostname URL
+            required: true
+          - path: zone
+            type: select
+            label: Zone
+            required: true
+            key_source:
+              file: cloudflare/locals.tf
+              root_path: zones
+          - path: service
+            type: select
+            label: Worker Service
+            required: true
+            key_source:
+              file: cloudflare/locals.tf
+              root_path: worker_scripts
+
+  - id: cloudflare_tunnel
+    category: cloudflare
+    kind: map_entry
+    label: Cloudflare Tunnels
+    file: cloudflare/locals.tf
+    root_path: tunnels
+    key_label: Tunnel Key
+    actions: [add, settings, delete]
+    steps:
+      - id: basics
+        title: Zero Trust Tunnel Details
+        fields:
+          - path: name
+            type: string
+            label: Tunnel Name
+            required: true
+          - path: hostname
+            type: string
+            label: Hostname
+          - path: local_service
+            type: string
+            label: Local Service URL
+            required: true
+          - path: no_tls_verify
+            type: boolean
+            label: No TLS Verify
+          - path: catch_all_service
+            type: string
+            label: Catch All Service
+
+  - id: doppler_group
+    category: doppler
+    kind: map_entry
+    label: Doppler Groups
+    file: doppler/locals.tf
+    root_path: groups
+    key_label: Group Name
+    actions: [add, delete]
+    steps:
+      - id: basics
+        title: Group Details
+        fields: []
+
+  - id: sentry_org
+    category: sentry
+    kind: singleton
+    label: Sentry Organization
+    file: sentry/locals.tf
+    root_path: organization
+    actions: [settings]
+    steps:
+      - id: basics
+        title: Organization Settings
+        fields:
+          - path: slug
+            type: string
+            label: Slug
+            required: true
+          - path: name
+            type: string
+            label: Name
+            required: true
+          - path: agree_terms
+            type: boolean
+            label: Agree to Terms
+            required: true
+
+  - id: sentry_team
+    category: sentry
+    kind: map_entry
+    label: Sentry Teams
+    file: sentry/locals.tf
+    root_path: teams
+    key_label: Team Slug
+    key_pattern: "^[a-z0-9-]+$"
+    actions: [add, settings, delete]
+    steps:
+      - id: basics
+        title: Team Details
+        fields:
+          - path: name
+            type: string
+            label: Name
+            required: true
+
+  - id: sentry_project
+    category: sentry
+    kind: map_entry
+    label: Sentry Projects
+    file: sentry/locals.tf
+    root_path: projects
+    key_label: Project Slug
+    key_pattern: "^[a-z0-9-]+$"
+    actions: [add, settings, delete]
+    steps:
+      - id: basics
+        title: Project Details
+        fields:
+          - path: name
+            type: string
+            label: Project Name
+            required: true
+          - path: platform
+            type: string
+            label: Platform
+            required: true
+          - path: teams
+            type: list_string
+            label: Teams
+            required: true
+            key_source:
+              file: sentry/locals.tf
+              root_path: teams
+          - path: default_key
+            type: boolean
+            label: Create Default Key
+
+  - id: sentry_key
+    category: sentry
+    kind: map_entry
+    label: Sentry Client Keys
+    file: sentry/locals.tf
+    root_path: keys
+    key_label: Key Name
+    actions: [add, settings, delete]
+    steps:
+      - id: basics
+        title: Key Details
+        fields:
+          - path: project
+            type: select
+            label: Sentry Project
+            required: true
+            key_source:
+              file: sentry/locals.tf
+              root_path: projects
+          - path: id
+            type: string
+            label: Sentry Key ID
+          - path: name
+            type: string
+            label: Key Name
+            required: true
+
+  - id: tailscale_dns_preferences
+    category: tailscale
+    kind: singleton
+    label: Tailscale DNS Preferences
+    file: tailscale/locals.tf
+    root_path: dns_preferences
+    actions: [settings]
+    steps:
+      - id: basics
+        title: DNS Preferences
+        fields:
+          - path: magic_dns
+            type: boolean
+            label: Enable Magic DNS
+            required: true
+
+  - id: tailscale_settings
+    category: tailscale
+    kind: singleton
+    label: Tailscale Settings
+    file: tailscale/locals.tf
+    root_path: tailnet_settings
+    actions: [settings]
+    steps:
+      - id: basics
+        title: General Settings
+        fields:
+          - path: devices_approval_on
+            type: boolean
+            label: Device Approval Required
+          - path: devices_auto_updates_on
+            type: boolean
+            label: Device Auto Updates Enabled
+          - path: devices_key_duration_days
+            type: integer
+            label: Key Duration (Days)
+          - path: users_approval_on
+            type: boolean
+            label: User Approval Required
+          - path: network_flow_logging_on
+            type: boolean
+            label: Network Flow Logging Enabled
+          - path: regional_routing_on
+            type: boolean
+            label: Regional Routing Enabled
+          - path: https_enabled
+            type: boolean
+            label: Enable HTTPS
+
+  - id: grafana_git_sync
+    category: grafana
+    kind: singleton
+    label: Grafana Git Sync
+    file: grafana/locals.tf
+    root_path: git_sync
+    actions: [settings]
+    steps:
+      - id: basics
+        title: Git Sync Configuration
+        fields:
+          - path: uid
+            type: string
+            label: UID
+            required: true
+          - path: title
+            type: string
+            label: Title
+            required: true
+          - path: type
+            type: string
+            label: Repo Type
+            required: true
+          - path: workflows
+            type: list_string
+            label: Workflows
+          - path: sync_enabled
+            type: boolean
+            label: Sync Enabled
+          - path: sync_target
+            type: string
+            label: Sync Target
+          - path: interval_seconds
+            type: integer
+            label: Sync Interval (Seconds)
+          - path: github_url
+            type: string
+            label: GitHub Repo URL
+          - path: github_branch
+            type: string
+            label: GitHub Branch
+
+  - id: grafana_slo
+    category: grafana
+    kind: map_entry
+    label: Grafana SLOs
+    file: grafana/locals.tf
+    root_path: slos
+    key_label: SLO Key
+    key_pattern: "^[a-z0-9-]+$"
+    actions: [add, settings, delete]
+    steps:
+      - id: basics
+        title: SLO Specifications
+        fields:
+          - path: name
+            type: string
+            label: SLO Name
+            required: true
+          - path: description
+            type: string
+            label: Description
+          - path: query.success_metric
+            type: string
+            label: Success Metric Query
+            required: true
+          - path: query.total_metric
+            type: string
+            label: Total Metric Query
+            required: true
+          - path: objective
+            type: number
+            label: Objective Threshold (0-1)
+            required: true
+          - path: window
+            type: string
+            label: Rolling Window
+            required: true
+
+  - id: grafana_synthetic_check
+    category: grafana
+    kind: map_entry
+    label: Grafana Synthetic Checks
+    file: grafana/locals.tf
+    root_path: synthetic_checks
+    key_label: Check Key
+    key_pattern: "^[a-z0-9-]+$"
+    actions: [add, settings, delete]
+    steps:
+      - id: basics
+        title: Check Configuration
+        fields:
+          - path: target
+            type: string
+            label: Target Endpoint
+            required: true
+          - path: job
+            type: string
+            label: Job Name
+            required: true
+          - path: type
+            type: select
+            label: Check Type
+            required: true
+            options: [http, ping, dns, tcp]
+          - path: frequency
+            type: integer
+            label: Frequency (ms)
+            required: true
+          - path: timeout
+            type: integer
+            label: Timeout (ms)
+          - path: enabled
+            type: boolean
+            label: Enabled
+          - path: probes
+            type: list_integer
+            label: Probes
+          - path: basic_metrics_only
+            type: boolean
+            label: Basic Metrics Only
+          - path: settings.http.fail_if_not_ssl
+            type: boolean
+            label: Fail if not SSL
+          - path: settings.http.method
+            type: select
+            label: HTTP Method
+            options: [GET, POST, PUT, DELETE, HEAD]
+          - path: settings.http.ip_version
+            type: select
+            label: IP Version Preference
+            options: [V4, V6]
+
+  - id: grafana_k6_project
+    category: grafana
+    kind: map_entry
+    label: Grafana k6 Projects
+    file: grafana/locals.tf
+    root_path: k6_projects
+    key_label: Project Key
+    key_pattern: "^[a-z0-9-]+$"
+    actions: [add, settings, delete]
+    steps:
+      - id: basics
+        title: Project Details
+        fields:
+          - path: name
+            type: string
+            label: Project Name
+            required: true
+
+  - id: grafana_k6_load_test
+    category: grafana
+    kind: map_entry
+    label: Grafana k6 Load Tests
+    file: grafana/locals.tf
+    root_path: k6_load_tests
+    key_label: Test Key
+    key_pattern: "^[a-z0-9-]+$"
+    actions: [add, settings, delete]
+    steps:
+      - id: basics
+        title: Load Test Details
+        fields:
+          - path: name
+            type: string
+            label: Test Name
+            required: true
+          - path: project_key
+            type: select
+            label: k6 Project Key
+            required: true
+            key_source:
+              file: grafana/locals.tf
+              root_path: k6_projects
+          - path: script_file
+            type: string
+            label: Script File Path
+            required: true
+
+  - id: grafana_oncall_schedule
+    category: grafana
+    kind: map_entry
+    label: Grafana OnCall Schedules
+    file: grafana/locals.tf
+    root_path: oncall_schedules
+    key_label: Schedule Key
+    key_pattern: "^[a-z0-9-]+$"
+    actions: [add, settings, delete]
+    steps:
+      - id: basics
+        title: Schedule Details
+        fields:
+          - path: name
+            type: string
+            label: Schedule Name
+            required: true
+          - path: type
+            type: select
+            label: Schedule Type
+            required: true
+            options: [calendar, rolling_users, custom]
+          - path: time_zone
+            type: string
+            label: Time Zone
+          - path: enable_web_overrides
+            type: boolean
+            label: Enable Web Overrides
+          - path: team_name
+            type: string
+            label: Team Name
+          - path: slack_channel
+            type: string
+            label: Slack Channel
+
+  - id: grafana_oncall_escalation_chain
+    category: grafana
+    kind: map_entry
+    label: Grafana OnCall Escalation Chains
+    file: grafana/locals.tf
+    root_path: oncall_escalation_chains
+    key_label: Chain Key
+    key_pattern: "^[a-z0-9-]+$"
+    actions: [add, settings, delete]
+    steps:
+      - id: basics
+        title: Escalation Chain Details
+        fields:
+          - path: name
+            type: string
+            label: Chain Name
+            required: true
+          - path: team_name
+            type: string
+            label: Team Name
+
+  - id: oci_vcn
+    category: oci
+    kind: map_entry
+    label: OCI VCNs
+    file: oci/locals.tf
+    root_path: vcns
+    key_label: VCN Key
+    key_pattern: "^[A-Za-z0-9._-]+$"
+    actions: [add, settings, delete]
+    steps:
+      - id: basics
+        title: VCN Details
+        fields:
+          - path: cidr_block
+            type: string
+            label: CIDR Block
+            required: true
+
+  - id: oci_subnet
+    category: oci
+    kind: map_entry
+    label: OCI Subnets
+    file: oci/locals.tf
+    root_path: subnets
+    key_label: Subnet Key
+    key_pattern: "^[A-Za-z0-9._-]+$"
+    actions: [add, settings, delete]
+    steps:
+      - id: basics
+        title: Subnet Details
+        fields:
+          - path: vcn_key
+            type: select
+            label: VCN
+            required: true
+            key_source:
+              file: oci/locals.tf
+              root_path: vcns
+          - path: cidr_block
+            type: string
+            label: CIDR Block
+            required: true
+          - path: prohibit_public_ip_on_vnic
+            type: boolean
+            label: Prohibit Public IP On VNIC
+          - path: route_table_key
+            type: string
+            label: Route Table Key
+
+  - id: oci_network_security_group
+    category: oci
+    kind: map_entry
+    label: OCI Network Security Groups
+    file: oci/locals.tf
+    root_path: network_security_groups
+    key_label: NSG Key
+    key_pattern: "^[A-Za-z0-9._-]+$"
+    actions: [add, settings, delete]
+    steps:
+      - id: basics
+        title: NSG Details
+        fields:
+          - path: vcn_key
+            type: select
+            label: VCN
+            required: true
+            key_source:
+              file: oci/locals.tf
+              root_path: vcns
+
+  - id: oci_instance
+    category: oci
+    kind: map_entry
+    label: OCI Instances
+    file: oci/locals.tf
+    root_path: instances
+    key_label: Instance Key
+    key_pattern: "^[A-Za-z0-9._-]+$"
+    actions: [add, settings, delete]
+    steps:
+      - id: basics
+        title: Instance Details
+        fields:
+          - path: subnet_key
+            type: select
+            label: Subnet
+            required: true
+            key_source:
+              file: oci/locals.tf
+              root_path: subnets
+          - path: private_ip
+            type: string
+            label: Private IP
+            required: true
+          - path: assign_public_ip
+            type: boolean
+            label: Assign Public IP
+          - path: shape
+            type: string
+            label: Shape
+            required: true
+          - path: boot_volume_size_gbs
+            type: integer
+            label: Boot Volume Size (GBs)
+            required: true
