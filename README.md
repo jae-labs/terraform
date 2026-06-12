@@ -40,14 +40,14 @@ This repository is the source of truth for all `jae-labs` infrastructure as code
         <sub><b>Doppler</b></sub>
       </a>
     </td>
+  </tr>
+  <tr>
     <td align="center" valign="middle" width="110" height="110">
       <a href="https://oracle.com">
         <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/oracle/oracle-original.svg" width="48" height="48" alt="OCI" /><br />
         <sub><b>OCI</b></sub>
       </a>
     </td>
-  </tr>
-  <tr>
     <td align="center" valign="middle" width="110" height="110">
       <a href="https://sentry.io">
         <img src="https://cdn.simpleicons.org/sentry/362D59?dark=ffffff" width="48" height="48" alt="Sentry" /><br />
@@ -60,6 +60,8 @@ This repository is the source of truth for all `jae-labs` infrastructure as code
         <sub><b>Tailscale</b></sub>
       </a>
     </td>
+  </tr>
+  <tr>
     <td align="center" valign="middle" width="110" height="110">
       <a href="https://grafana.com">
         <img src="https://cdn.simpleicons.org/grafana/F46800" width="48" height="48" alt="Grafana" /><br />
@@ -70,6 +72,12 @@ This repository is the source of truth for all `jae-labs` infrastructure as code
       <a href="https://honeycomb.io">
         <img src="https://upload.wikimedia.org/wikipedia/commons/2/24/Honeycomb.io_logo.svg" height="32" alt="Honeycomb" /><br />
         <sub><b>Honeycomb</b></sub>
+      </a>
+    </td>
+    <td align="center" valign="middle" width="110" height="110">
+      <a href="https://supabase.com">
+        <img src="https://cdn.simpleicons.org/supabase/3ECF8E" width="48" height="48" alt="Supabase" /><br />
+        <sub><b>Supabase</b></sub>
       </a>
     </td>
   </tr>
