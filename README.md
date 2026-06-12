@@ -70,7 +70,7 @@ This repository is the source of truth for all `jae-labs` infrastructure as code
     </td>
     <td align="center" valign="middle" width="110" height="110">
       <a href="https://honeycomb.io">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/2/24/Honeycomb.io_logo.svg" height="32" alt="Honeycomb" /><br />
+        <img src="https://www.vectorlogo.zone/logos/honeycombio/honeycombio-icon.svg" width="48" height="48" alt="Honeycomb" /><br />
         <sub><b>Honeycomb</b></sub>
       </a>
     </td>
