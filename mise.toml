@@ -1,0 +1,9 @@
+# Pinned tool versions for local development.
+# CI pins its own versions in .github/workflows/ci.yml;
+# this file keeps local parity.
+
+[tools]
+terraform = "1.15.5"
+tflint = "0.63.1"
+lefthook = "2.1.9"
+"aqua:sethvargo/ratchet" = "0.11.4"

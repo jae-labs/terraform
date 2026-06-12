@@ -1,0 +1,74 @@
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "github-actions"
+    assignees:
+      - "luiz1361"
+  - package-ecosystem: "terraform"
+    directory: "/github"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "terraform"
+    assignees:
+      - "luiz1361"
+  - package-ecosystem: "terraform"
+    directory: "/cloudflare"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "terraform"
+    assignees:
+      - "luiz1361"
+  - package-ecosystem: "terraform"
+    directory: "/doppler"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "terraform"
+    assignees:
+      - "luiz1361"
+  - package-ecosystem: "terraform"
+    directory: "/oci"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "terraform"
+    assignees:
+      - "luiz1361"
+  - package-ecosystem: "terraform"
+    directory: "/sentry"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "terraform"
+    assignees:
+      - "luiz1361"
+  - package-ecosystem: "terraform"
+    directory: "/tailscale"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "terraform"
+    assignees:
+      - "luiz1361"
+  - package-ecosystem: "terraform"
+    directory: "/grafana"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "terraform"
+    assignees:
+      - "luiz1361"
