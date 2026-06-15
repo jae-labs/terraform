@@ -139,6 +139,23 @@ resource "grafana_k6_load_test" "load_tests" {
   script     = file("${path.module}/${each.value.script_file}")
 }
 
+# --- k6 Performance Load Test Schedules ---
+
+resource "grafana_k6_schedule" "load_test_schedules" {
+  for_each = {
+    for k, v in local.k6_load_tests : k => v
+    if lookup(v, "schedule", null) != null
+  }
+
+  load_test_id = grafana_k6_load_test.load_tests[each.key].id
+  starts       = "2026-06-15T00:00:00Z"
+
+  cron {
+    schedule = each.value.schedule
+    timezone = "UTC"
+  }
+}
+
 # --- OnCall Shifts ---
 
 resource "grafana_oncall_on_call_shift" "shifts" {

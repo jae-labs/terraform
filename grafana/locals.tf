@@ -102,11 +102,13 @@ locals {
       name        = "justanother.engineer - Browser Ramp Test"
       project_key = "justanother-engineer"
       script_file = "scripts/browser_ramp_test.js"
+      schedule    = "@weekly"
     }
     "health-vitals-test" = {
       name        = "justanother.engineer - Health/Vitals Test"
       project_key = "justanother-engineer"
       script_file = "scripts/health_vitals_test.js"
+      schedule    = "@weekly"
     }
   }
 
