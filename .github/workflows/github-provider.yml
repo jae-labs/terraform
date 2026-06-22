@@ -1,0 +1,18 @@
+name: "GitHub Provider"
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "github/**"
+
+jobs:
+  apply:
+    uses: ./.github/workflows/terraform-reusable.yml
+    with:
+      module-path: github
+      provider-token-name: GITHUB_TOKEN
+    secrets: inherit

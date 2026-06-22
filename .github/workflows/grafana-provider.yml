@@ -1,0 +1,17 @@
+name: "Grafana Provider"
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "grafana/**"
+
+jobs:
+  apply:
+    uses: ./.github/workflows/terraform-reusable.yml
+    with:
+      module-path: grafana
+    secrets: inherit
