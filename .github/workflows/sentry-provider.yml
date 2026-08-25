@@ -1,0 +1,18 @@
+name: "Sentry Provider"
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "sentry/**"
+
+jobs:
+  apply:
+    uses: ./.github/workflows/terraform-reusable.yml
+    with:
+      module-path: sentry
+      provider-token-name: SENTRY_AUTH_TOKEN
+    secrets: inherit
