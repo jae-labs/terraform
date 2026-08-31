@@ -12,12 +12,6 @@ locals {
   }
 
   projects = {
-    "concierge" = {
-      name        = "concierge"
-      platform    = "go"
-      teams       = ["jae"]
-      default_key = false
-    }
     "pages" = {
       name        = "pages"
       platform    = "javascript-astro"
@@ -28,11 +22,6 @@ locals {
 
   keys = {
     # these are the existing default client-key ids used to adopt unmanaged keys into terraform.
-    "concierge:default" = {
-      project = "concierge"
-      id      = "a05aa867c95aa4083bd55252cdf5048b"
-      name    = "Default"
-    }
     "pages:default" = {
       project = "pages"
       id      = "6ca80b329356604c3c9d65bfce559e2f"
