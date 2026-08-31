@@ -104,24 +104,6 @@ locals {
         comment  = "Home Assistant - Tailscale"
         priority = null
       }
-      "oci-a" = {
-        type     = "A"
-        name     = "oci"
-        content  = "141.147.61.91"
-        ttl      = 1
-        proxied  = false
-        comment  = "OCI instance"
-        priority = null
-      }
-      "oci-prod-1-tunnel" = {
-        type     = "CNAME"
-        name     = "oci-prod-1"
-        content  = "${cloudflare_zero_trust_tunnel_cloudflared.tunnels["oci-prod-1"].id}.cfargotunnel.com"
-        ttl      = 1
-        proxied  = true
-        comment  = "oci-prod-1 instance via Cloudflare Tunnel"
-        priority = null
-      }
       "root-cname" = {
         type     = "CNAME"
         name     = "justanother.engineer"
@@ -203,15 +185,6 @@ locals {
         comment  = null
         priority = null
       }
-      "ecommerce-production-eu" = {
-        type     = "CNAME"
-        name     = "ecommerce.eu.foxesinboxes"
-        content  = "a86efb9c7c9a4468d87e5c3191038168-defd6add9405dac0.elb.eu-west-1.amazonaws.com"
-        ttl      = 1
-        proxied  = false
-        comment  = "Foxes in Boxes - Production EU Ecommerce"
-        priority = null
-      }
     }
   }
 
@@ -254,44 +227,6 @@ locals {
       hostname = "media.justanother.engineer"
       zone     = "justanother.engineer"
       service  = "media-proxy"
-    }
-  }
-
-  # ============================================================================
-  # Local Mapping: tunnels
-  #
-  # Purpose:
-  #   Configure Cloudflare Zero Trust tunnels for secure outbound-only
-  #   connections from origin infrastructure to the Cloudflare edge network.
-  #   The tunnel connector (cloudflared) runs on the origin and establishes
-  #   an outbound connection to Cloudflare, eliminating the need for public
-  #   IP port exposure.
-  #
-  # How it works:
-  #   1. Defines each tunnel by a unique key (e.g., "oci-prod-1").
-  #   2. Specifies the tunnel name, the public hostname that will route
-  #      traffic through the tunnel, and the local service to forward to.
-  #   3. The DNS CNAME record for the tunnel is defined in dns_records,
-  #      referencing the tunnel's auto-generated CNAME.
-  #   4. Used by for_each in tunnel resources in main.tf to create the
-  #      Cloudflare tunnel and its ingress configuration.
-  #
-  # Output format:
-  #   {
-  #     "<tunnel_key>" = {
-  #       name          = "<tunnel_name>"
-  #       hostname      = "<public_hostname>"
-  #       local_service = "<local_service_url>"
-  #     }
-  #   }
-  # ============================================================================
-  tunnels = {
-    "oci-prod-1" = {
-      name              = "oci-prod-1-tunnel"
-      hostname          = "oci-prod-1.justanother.engineer"
-      local_service     = "http://127.0.0.1:8080"
-      no_tls_verify     = true
-      catch_all_service = "http_status:404"
     }
   }
 }
