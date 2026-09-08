@@ -1,0 +1,14 @@
+# Terraform
+**/.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfplan
+
+# Local tooling
+.DS_Store
+.vscode/
+
+# Secrets
+.env
+*.pem
+*-sa-key.json

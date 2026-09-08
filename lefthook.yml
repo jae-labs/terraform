@@ -1,0 +1,14 @@
+# Lefthook Git Hooks
+# https://github.com/evilmartians/lefthook
+#
+# Tool versions are pinned via mise (see mise.toml).
+
+pre-commit:
+  parallel: true
+  commands:
+    tf-fmt:
+      glob: "**/*.tf"
+      run: terraform fmt {staged_files}
+    tf-tflint:
+      glob: "**/*.tf"
+      run: tflint --recursive --config="$PWD/.tflint.hcl"

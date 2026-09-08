@@ -1,0 +1,24 @@
+# This file is maintained automatically by "terraform init".
+# Manual edits may be lost in future updates.
+
+provider "registry.terraform.io/honeycombio/honeycombio" {
+  version     = "0.50.0"
+  constraints = "~> 0.50.0"
+  hashes = [
+    "h1:DLZofPbrua+iKokdCRiOA6Tkd5uwEOZqqasRE8axsLo=",
+    "zh:103c3248531ebf781919752e8bd0f41744a2750a7e455d6b599ec7d7f81d4d44",
+    "zh:1d7d4fcc8ce959631088ff1fac4fab4ede5d69f03597bce959e2f2670998d35a",
+    "zh:3e425403db9f390d2e32b8f2d2cf9d2aec6a67ed3e9a422c8bda43da54a3b676",
+    "zh:4946ac9f5c0fa65d0a9d0c87d5e8988be2903940788bd12cdf8d988746edb028",
+    "zh:57238f999047c278d7d711e69cb306f3d943f079422a373ee368ddd1b9cd3810",
+    "zh:5851313859d09770ad0ba10c7abf03c2c70ca7c9416288db746c86934f4c433b",
+    "zh:59676e532504a44c1d536716c41203118c86eadbba57b257126d3a766d5559b5",
+    "zh:714a7aa4673b15fa569e31ddb06e072dd526b74ac964ddcde0a9f9a564685ff5",
+    "zh:7fb1cb6535149ce550fc1be1c90a2d25a39f06af9592ae6ff4e2d3c5c9a143a9",
+    "zh:8927fb3e69cd5660345070840e9b13c414eece837b6a18974f97266d7c6174ba",
+    "zh:9864c15cb1a3df184af9802544e66cc74da466c8a1b72a7e0fc06e101ffe17c9",
+    "zh:ad07c87b4a27c9f84ce6f24ef15b01128293dadb24ccc53507ea450e4e9fbe72",
+    "zh:cdf7e63939291da51e83017336a42d84be16e1d3a633aeae6d43412e067011c1",
+    "zh:e92510e141f6e86f2afa7303f5fb3f6dbfc5950c611ca703a9b10ebe2d89ef19",
+  ]
+}
