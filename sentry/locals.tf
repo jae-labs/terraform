@@ -18,6 +18,12 @@ locals {
       teams       = ["jae"]
       default_key = false
     }
+    "jobpulse" = {
+      name        = "jobpulse"
+      platform    = "javascript-react"
+      teams       = ["jae"]
+      default_key = false
+    }
   }
 
   keys = {
