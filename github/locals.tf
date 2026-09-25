@@ -166,7 +166,7 @@ locals {
       squash_merge_commit_message = "COMMIT_MESSAGES"
       squash_merge_commit_title   = "COMMIT_OR_PR_TITLE"
       team_access                 = { "Maintainers" = "admin" }
-      topics                      = ["jobsearch", "dashboard", "react", "supabase"]
+      topics                      = ["ats", "career", "dashboard", "job-search", "job-tracker", "jobs", "postgresql", "react", "supabase", "typescript"]
       visibility                  = "public"
       vulnerability_alerts        = true
       web_commit_signoff_required = false
