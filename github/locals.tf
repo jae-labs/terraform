@@ -23,8 +23,7 @@ locals {
   }
 
   members = {
-    "luiz1361"        = { role = "admin", full_name = "Luiz F. C. Martins" }
-    "abubakar-abiona" = { role = "member", full_name = "Abubakar Abiona" }
+    "luiz1361" = { role = "admin", full_name = "Luiz F. C. Martins" }
   }
 
   teams = {
@@ -38,7 +37,7 @@ locals {
     "Collaborators" = {
       description = "Collaborators"
       privacy     = "closed"
-      members     = ["abubakar-abiona"]
+      members     = []
       maintainers = ["luiz1361"]
       org_roles   = {}
     }
