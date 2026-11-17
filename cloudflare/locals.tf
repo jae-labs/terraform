@@ -131,6 +131,15 @@ locals {
         comment  = null
         priority = null
       }
+      "status-cname" = {
+        type     = "CNAME"
+        name     = "status"
+        content  = "statuspage.incident.io"
+        ttl      = 1
+        proxied  = false
+        comment  = null
+        priority = null
+      }
       "mx-zoho-1" = {
         type     = "MX"
         name     = "justanother.engineer"
