@@ -194,6 +194,15 @@ locals {
         comment  = null
         priority = null
       }
+      "txt-acme-challenge-status" = {
+        type     = "TXT"
+        name     = "_acme-challenge.status"
+        content  = "EvEChwa4g8PDsASJSxyc6D-o5RRBT6ZCh-HlEX6WSs8"
+        ttl      = 1
+        proxied  = false
+        comment  = null
+        priority = null
+      }
     }
   }
 
