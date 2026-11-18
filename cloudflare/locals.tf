@@ -140,6 +140,15 @@ locals {
         comment  = null
         priority = null
       }
+      "ip-cname" = {
+        type     = "CNAME"
+        name     = "ip"
+        content  = "switchboard.fra.prisma.build"
+        ttl      = 1
+        proxied  = true
+        comment  = null
+        priority = null
+      }
       "mx-zoho-1" = {
         type     = "MX"
         name     = "justanother.engineer"
@@ -207,6 +216,15 @@ locals {
         type     = "TXT"
         name     = "_acme-challenge.status"
         content  = "EvEChwa4g8PDsASJSxyc6D-o5RRBT6ZCh-HlEX6WSs8"
+        ttl      = 1
+        proxied  = false
+        comment  = null
+        priority = null
+      }
+      "txt-prisma-verification-ip" = {
+        type     = "TXT"
+        name     = "_prisma-verification.ip"
+        content  = "prisma-verification=cbf816b072de858f317b81164fe62026f08615994e524553ab0455b1a5e2dbd1"
         ttl      = 1
         proxied  = false
         comment  = null
