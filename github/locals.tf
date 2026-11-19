@@ -576,7 +576,7 @@ locals {
       has_issues           = true
       has_projects         = false
       has_wiki             = false
-      homepage_url         = "https://tools.justanother.engineer"
+      homepage_url         = "https://cg5l6gtazzu04lvpkz4ycr8t.fra.prisma.build"
       is_template          = false
       merge_commit_message = "PR_TITLE"
       merge_commit_title   = "MERGE_MESSAGE"
