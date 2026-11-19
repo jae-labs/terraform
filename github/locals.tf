@@ -635,5 +635,47 @@ locals {
       vulnerability_alerts        = true
       web_commit_signoff_required = false
     }
+    "tools" = {
+      allow_auto_merge            = false
+      allow_merge_commit          = true
+      allow_rebase_merge          = true
+      allow_squash_merge          = true
+      allow_update_branch         = false
+      archived                    = false
+      branch_protection           = null
+      default_branch              = "main"
+      delete_branch_on_merge      = false
+      dependabot_security_updates = true
+      description                 = "Miscellaneous tools (speedtest, etc.)."
+      environments = {
+        "development" = {}
+        "production" = {
+          deployment_branch_policy = {
+            protected_branches     = true
+            custom_branch_policies = false
+          }
+        }
+      }
+      has_discussions      = false
+      has_issues           = true
+      has_projects         = false
+      has_wiki             = false
+      homepage_url         = "https://tools.justanother.engineer"
+      is_template          = false
+      merge_commit_message = "PR_TITLE"
+      merge_commit_title   = "MERGE_MESSAGE"
+      pages                = null
+      security_and_analysis = {
+        secret_scanning                 = { status = "enabled" }
+        secret_scanning_push_protection = { status = "enabled" }
+      }
+      squash_merge_commit_message = "COMMIT_MESSAGES"
+      squash_merge_commit_title   = "COMMIT_OR_PR_TITLE"
+      team_access                 = { "Maintainers" = "admin" }
+      topics                      = ["tools", "utilities", "web-tools", "speedtest", "network"]
+      visibility                  = "public"
+      vulnerability_alerts        = true
+      web_commit_signoff_required = false
+    }
   }
 }
