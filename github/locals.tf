@@ -562,7 +562,7 @@ locals {
       default_branch              = "main"
       delete_branch_on_merge      = false
       dependabot_security_updates = true
-      description                 = "Miscellaneous tools (speedtest, etc.)."
+      description                 = "Miscellaneous tools."
       environments = {
         "development" = {}
         "production" = {
@@ -588,7 +588,7 @@ locals {
       squash_merge_commit_message = "COMMIT_MESSAGES"
       squash_merge_commit_title   = "COMMIT_OR_PR_TITLE"
       team_access                 = { "Maintainers" = "admin" }
-      topics                      = ["tools", "utilities", "web-tools", "speedtest", "network"]
+      topics                      = ["tools", "utilities", "misc"]
       visibility                  = "public"
       vulnerability_alerts        = true
       web_commit_signoff_required = false
